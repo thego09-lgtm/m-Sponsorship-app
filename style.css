@@ -574,6 +574,15 @@ body {
    ────────────────────────────────────────────── */
 .period-header { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; margin-bottom: 10px; }
 .period-header .field-label { margin-bottom: 0; }
+/* 모바일에서는 안내 문구를 다음 줄로 내린다 (PC는 한 줄 유지) */
+@media (max-width: 560px) {
+  .period-header { flex-direction: column; align-items: stretch; gap: 5px; }
+  /* 긴 문구(10년 이상)도 한 줄을 다 쓰고 어절 단위로 줄바꿈 */
+  .period-hint {
+    display: block; width: 100%;
+    line-height: 1.5; word-break: keep-all; overflow-wrap: break-word;
+  }
+}
 .period-hint { font-size: 11px; color: var(--muted); }
 .period-hint.flash { animation: hintIn .3s ease; }
 @keyframes hintIn {

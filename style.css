@@ -654,6 +654,30 @@ input[type=range]::-moz-range-thumb {
 .settings-item-label .req-mark { margin-left: 3px; }
 .settings-note { font-size: 11px; color: var(--gray-text); padding: 12px 0 4px; line-height: 1.6; }
 
+/* ──────────────────────────────────────────────
+   모바일 — 입력칸 포커스 시 화면 확대 방지
+   iOS Safari는 글자 크기가 16px 미만인 입력칸에 포커스하면
+   화면을 자동으로 확대한다. 터치 기기에서는 16px로 올려 막는다.
+   ────────────────────────────────────────────── */
+@media (pointer: coarse) {
+  .text-input,
+  .select-input,
+  .form-type-select,
+  input[type="text"], input[type="tel"], input[type="email"],
+  input[type="number"], input[type="search"], select, textarea {
+    font-size: 16px;
+  }
+  /* 헤더 셀렉트가 커져 상단바가 밀리지 않도록 폭 제한 */
+  .form-type-select { max-width: 44vw; padding: 6px 8px; }
+  .top-title { font-size: 15px; }
+}
+
+/* 더블탭 확대(300ms 지연) 방지 */
+button, .choice-btn, .period-btn, .region-card, .option-card,
+.toggle, .doc-item, .upload-box, .mkt-channel, .progress-step {
+  touch-action: manipulation;
+}
+
 /* 모션 최소화 선호 대응 */
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: .01ms !important; }

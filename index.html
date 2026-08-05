@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>결연서</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 지역 선택 카드에서 공용으로 쓰는 세계지도 실루엣.
+     각 카드가 --f-asia / --f-latin / --f-africa 변수로 해당 대륙만 채웁니다. -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <symbol id="worldOutline" viewBox="14 14 706 364">
+    <g class="wm-land">
+      <path d="M24,50 L40,37 L80,39 L110,39 L140,45 L170,39 L190,31 L210,45 L230,66 L250,87 L240,105 L220,113 L210,131 L198,157 L192,144 L182,147 L166,155 L160,147 L140,141 L126,139 L116,126 L110,97 L100,79 L80,66 L60,66 L30,60 Z"/>
+      <path d="M340,126 L342,110 L356,97 L360,89 L368,86 L376,73 L382,68 L386,79 L396,79 L404,73 L416,66 L420,66 L420,105 L416,115 L406,118 L398,118 L388,123 L378,107 L366,110 L356,110 L348,128 Z"/>
+      <path d="M588,280 L604,270 L620,254 L634,254 L644,252 L650,262 L654,272 L666,288 L666,306 L660,320 L650,322 L640,322 L620,306 L610,312 L596,314 L590,312 L586,291 Z"/>
+      <path style="fill:var(--f-asia, none)" d="M420,39 L450,34 L480,34 L510,29 L550,24 L580,29 L620,34 L650,39 L680,45 L700,55 L710,66 L680,71 L670,92 L644,105 L624,110 L614,123 L604,144 L584,168 L576,189 L570,197 L566,212 L560,204 L556,197 L546,168 L536,165 L526,191 L516,202 L506,178 L500,165 L492,157 L480,157 L472,152 L460,144 L450,123 L442,115 L432,115 L420,105 L414,79 L416,55 Z"/>
+      <path style="fill:var(--f-africa, none)" d="M326,183 L328,165 L336,149 L348,131 L366,126 L380,126 L400,136 L416,141 L424,141 L430,157 L436,176 L446,191 L462,191 L456,210 L444,225 L440,238 L440,262 L430,278 L426,291 L416,309 L400,314 L396,309 L388,283 L384,267 L382,233 L378,212 L366,207 L352,210 L344,212 L334,199 Z"/>
+      <path style="fill:var(--f-latin, none)" d="M126,139 L160,147 L166,155 L172,176 L184,168 L186,183 L194,199 L206,202 L216,191 L238,197 L256,210 L262,223 L276,231 L290,244 L282,265 L264,288 L248,314 L236,328 L226,354 L218,367 L214,341 L214,320 L218,301 L220,275 L208,259 L198,238 L200,228 L204,220 L206,207 L196,199 L190,194 L180,186 L168,181 L150,170 L136,155 Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="top-bar">
+  <div class="top-bar-row">
+    <div class="top-title">결연서</div>
+    <div class="top-bar-actions">
+      <select id="formTypeSelect" class="form-type-select">
+        <option value="standard">스탠다드</option>
+        <option value="consign_manual">컨사인-직접입력용</option>
+        <option value="consign_assigned">컨사인-지정용</option>
+        <option value="church_reg">교회·기금정기</option>
+        <option value="church_both">교회·기금정기일시</option>
+        <option value="corp">기업후원</option>
+        <option value="corp_child">기업 1:1 어린이양육 후원</option>
+        <option value="corp_child_emp">기업 1:1 어린이양육 후원_임직원용</option>
+      </select>
+      <button class="settings-btn" id="settingsOpenBtn" type="button" title="필드 노출 설정">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track">
+      <button class="progress-step" type="button" data-step="1" aria-label="1단계 회원정보">
+        <span class="progress-seg" data-seg="1"></span><span class="progress-label">회원정보</span>
+      </button>
+      <button class="progress-step" type="button" data-step="2" aria-label="2단계 후원방법">
+        <span class="progress-seg" data-seg="2"></span><span class="progress-label">후원방법</span>
+      </button>
+      <button class="progress-step" type="button" data-step="3" aria-label="3단계 결제방법">
+        <span class="progress-seg" data-seg="3"></span><span class="progress-label">결제방법</span>
+      </button>
+      <button class="progress-step" type="button" data-step="4" aria-label="4단계 동의·서명">
+        <span class="progress-seg" data-seg="4"></span><span class="progress-label">동의·서명</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ══════ 컨사인용: 지정 어린이 정보 (사전 배정 표시, 입력 아님) ══════ -->
+  <div class="child-info-card" id="childInfoCard" hidden>
+    <div class="child-photo">🧒</div>
+    <div class="child-info-text">
+      <div class="child-badge">1:1 어린이양육</div>
+      <div class="child-name">린린</div>
+      <div class="child-meta">필리핀 &nbsp;|&nbsp; 4살 &nbsp;|&nbsp; 여자</div>
+    </div>
+    <div class="child-amount-wrap">
+      <div class="child-amount-label">매월 후원금</div>
+      <div class="child-amount">50,000원</div>
+    </div>
+  </div>
+
+  <!-- ══════ ACCORDION 1: 후원회원 정보 ══════ -->
+  <section class="group open" id="group1" data-group="1">
+    <div class="group-head">
+      <span class="group-num">1</span>
+      <span class="group-title">후원회원 정보</span>
+      <span class="group-done-badge">입력완료</span>
+    </div>
+    <div class="group-body" id="groupBody1" role="region" aria-labelledby="group1">
+      <div class="group-body-inner">
+
+        <!-- 개인 후원자용 필드 -->
+        <div class="personal-fields">
+          <div class="field row-2" data-field="name" data-req="true" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp_child_emp">
+            <div style="flex:2;">
+              <div class="field-label">이름<span class="req-mark">*</span></div>
+              <input class="text-input" type="text" placeholder="홍길동" data-input="name">
+            </div>
+          </div>
+          <div class="field" data-field="nameEn" data-req="false" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp_child_emp">
+            <div class="field-label">영문명</div>
+            <div class="row-2">
+              <input class="text-input" type="text" placeholder="이름 (GILDONG)" aria-label="영문 이름">
+              <input class="text-input" type="text" placeholder="성 (HONG)" aria-label="영문 성">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field field-birth" data-field="birth" data-req="true" data-label="생년월일(또는 사업자번호)" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp_child_emp">
+              <div class="field-label">생년월일<span class="req-mark">*</span><span class="field-hint">또는 사업자번호</span></div>
+              <input class="text-input" type="text" placeholder="YYYYMMDD" data-input="birth" inputmode="numeric" maxlength="10">
+              <div class="field-note" data-only-forms="corp_child_emp">소득공제자가 임직원 개인일 경우, 소득공제용 정보제공에 동의 시 주민등록번호 뒷자리를 함께 기재해 주세요. 주민등록번호는 연말정산 신청 목적을 위해 소득세법에 따라 수집합니다.</div>
+            </div>
+            <div class="field field-gender" data-field="gender" data-req="true" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both">
+              <div class="field-label">성별<span class="req-mark">*</span></div>
+              <div class="choice-group" data-choice="gender">
+                <button class="choice-btn" type="button" data-val="남자">남자</button>
+                <button class="choice-btn" type="button" data-val="여자">여자</button>
+              </div>
+            </div>
+            <div class="field field-gender" data-field="taxDeduction" data-req="true" data-label="소득공제자" data-forms="corp_child_emp">
+              <div class="field-label">소득공제자<span class="req-mark">*</span></div>
+              <div class="choice-group" data-choice="taxDeduction">
+                <button class="choice-btn" type="button" data-val="기업">기업</button>
+                <button class="choice-btn" type="button" data-val="임직원">임직원</button>
+              </div>
+            </div>
+          </div>
+          <div class="field" data-field="phone" data-req="true" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp_child_emp">
+            <div class="field-label">휴대번호<span class="req-mark">*</span></div>
+            <div class="addr-row">
+              <input class="text-input" type="tel" inputmode="numeric" placeholder="010-0000-0000"
+                     data-input="phone" id="phoneInput" maxlength="13">
+              <button class="addr-btn" type="button" id="phoneVerifyBtn">인증요청</button>
+            </div>
+            <div class="verify-badge" id="phoneVerifiedBadge" hidden>✓ 휴대번호 인증 완료</div>
+
+            <!-- 문자 인증번호 -->
+            <div class="verify-box" id="phoneVerifyBox" hidden>
+              <div class="verify-head">
+                <span>문자로 받은 <b>인증번호 6자리</b>를 입력해 주세요.</span>
+                <span class="verify-timer" id="phoneTimer">03:00</span>
+              </div>
+              <div class="addr-row">
+                <input class="text-input" type="text" inputmode="numeric" maxlength="6"
+                       placeholder="인증번호 6자리" id="phoneCodeInput" aria-label="휴대번호 인증번호">
+                <button class="addr-btn" type="button" id="phoneConfirmBtn">확인</button>
+              </div>
+            </div>
+            <div class="verify-msg" id="phoneVerifyMsg" role="status"></div>
+          </div>
+          <div class="field" data-field="phoneHome" data-req="false" data-label="자택전화" data-forms="corp_child_emp">
+            <div class="field-label">자택전화</div>
+            <input class="text-input" type="tel" inputmode="numeric" placeholder="02-0000-0000">
+          </div>
+          <div class="field" data-field="church" data-req="false" data-forms="church_reg,church_both">
+            <div class="field-label">출석교회<span class="field-hint">*출석교회가 다를 시 기재</span></div>
+            <input class="text-input" type="text" placeholder="OO교회">
+          </div>
+          <div class="field" data-field="email" data-req="true" data-req-forms="church_reg,church_both" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp_child_emp">
+            <div class="field-label">이메일<span class="req-mark email-req-mark" hidden>*</span></div>
+            <input class="text-input" type="email" placeholder="example@email.com" data-input="email">
+          </div>
+          <div class="field" data-field="address" data-req="true" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp_child_emp">
+            <div class="field-label">주소<span class="req-mark">*</span></div>
+            <div class="addr-row">
+              <input class="text-input" type="text" placeholder="도로명 주소" data-input="address">
+              <button class="addr-btn" type="button" data-addr-search>주소찾기</button>
+            </div>
+            <input class="text-input addr-detail" type="text" placeholder="상세주소 (동/호수)" aria-label="상세주소">
+          </div>
+
+          <div class="field" data-field="company" data-req="true" data-label="재직 중인 회사" data-forms="corp_child_emp">
+            <div class="field-label">재직 중인 회사<span class="req-mark">*</span></div>
+            <input class="text-input" type="text" placeholder="주식회사 OOO" data-input="company">
+          </div>
+
+          <!-- 생년월일이 만 14세 미만일 때만 노출 (data-cond="minor") -->
+          <div class="field minor-box" data-field="minorGuardian" data-req="false" data-cond="minor" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both">
+            <div class="field-label">후원자가 14세 미만인 경우</div>
+            <div class="row-2" style="margin-bottom:10px;">
+              <input class="text-input" type="text" placeholder="법정대리인 성함">
+              <input class="text-input" type="text" placeholder="법정대리인 연락처">
+            </div>
+            <div class="choice-group" data-choice="guardianConsent">
+              <button class="choice-btn" type="button" data-val="동의함">동의함</button>
+              <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 기업 후원자용 필드 -->
+        <div class="corp-fields" hidden>
+          <div class="field" data-field="corpNameKo" data-req="true" data-forms="corp,corp_child">
+            <div class="field-label">기업명(한글)<span class="req-mark">*</span></div>
+            <input class="text-input" type="text" placeholder="주식회사 OOO" data-input="corpNameKo">
+          </div>
+          <div class="field" data-field="corpNameEn" data-req="false" data-forms="corp,corp_child">
+            <div class="field-label">기업명(영문)</div>
+            <input class="text-input" type="text" placeholder="OOO Co., Ltd.">
+          </div>
+          <div class="field" data-field="corpBizNo" data-req="true" data-forms="corp,corp_child">
+            <div class="field-label">사업자번호<span class="req-mark">*</span></div>
+            <input class="text-input" type="text" placeholder="000-00-00000" data-input="corpBizNo">
+          </div>
+          <div class="field" data-field="corpAddress" data-req="true" data-forms="corp,corp_child">
+            <div class="field-label">주소<span class="req-mark">*</span></div>
+            <div class="addr-row">
+              <input class="text-input" type="text" placeholder="도로명 주소" data-input="corpAddress">
+              <button class="addr-btn" type="button" data-addr-search>주소찾기</button>
+            </div>
+            <input class="text-input addr-detail" type="text" placeholder="상세주소 (층/호수)" aria-label="상세주소">
+          </div>
+          <div class="field row-2" data-field="corpManager" data-req="true" data-forms="corp,corp_child">
+            <div style="flex:1;">
+              <div class="field-label">담당자명/직함<span class="req-mark">*</span></div>
+              <input class="text-input" type="text" placeholder="홍길동 / 대리" data-input="corpManager">
+            </div>
+          </div>
+          <div class="field row-2" data-field="corpContact" data-req="true" data-forms="corp,corp_child" data-label="담당자 휴대폰번호">
+            <div style="flex:1;">
+              <div class="field-label">사무실번호</div>
+              <input class="text-input" type="tel" placeholder="02-0000-0000">
+            </div>
+            <div style="flex:1;">
+              <div class="field-label">휴대폰번호<span class="req-mark">*</span></div>
+              <input class="text-input" type="tel" placeholder="010-0000-0000" data-input="corpContact">
+            </div>
+          </div>
+          <div class="field" data-field="corpEmail" data-req="true" data-forms="corp,corp_child">
+            <div class="field-label">담당자 이메일<span class="req-mark">*</span></div>
+            <input class="text-input" type="email" placeholder="example@company.com" data-input="corpEmail">
+          </div>
+        </div>
+
+        <button class="next-btn" type="button" id="nextBtn1" data-next="1">다음</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ ACCORDION 2: 후원 방법 ══════ -->
+  <section class="group locked" id="group2" data-group="2">
+    <div class="group-head">
+      <span class="group-num">2</span>
+      <span class="group-title">후원 방법</span>
+      <span class="group-done-badge">입력완료</span>
+    </div>
+    <div class="group-body" id="groupBody2" role="region" aria-labelledby="group2">
+      <div class="group-body-inner">
+
+        <div class="personal-support-fields">
+          <div class="field" data-field="childCount" data-req="true" data-label="후원 인원수" data-forms="standard,church_reg,church_both,corp_child">
+            <div class="field-label" data-only-forms="standard,church_reg,church_both">1:1 어린이결연 (매월 50,000원) — 후원 인원수<span class="req-mark">*</span></div>
+            <div class="field-label" data-only-forms="corp_child">우리기업은 몇 명의 어린이를 양육하고자 합니다<span class="req-mark">*</span></div>
+            <div class="amount-row count-row">
+              <input class="text-input" type="number" min="1" placeholder="예: 1" data-input="childCount">
+              <span class="amount-suffix">명</span>
+            </div>
+            <div class="field-note">어린이 1명 양육 후원금은 월 50,000원입니다.</div>
+          </div>
+          <div class="field" data-field="childNo" data-req="false" data-forms="consign_manual">
+            <div class="field-label">후원 어린이번호</div>
+            <div class="addr-row">
+              <input class="text-input" type="text" placeholder="지정 결연번호" data-input="childNo" id="childNoInput">
+              <button class="addr-btn qr-btn" type="button" id="qrScanBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3z"/><path d="M20 14v3M17 20h4M14 20h0"/></svg>
+                QR 스캔
+              </button>
+            </div>
+            <div class="field-note">어린이 카드의 QR코드를 촬영하면 번호가 자동으로 입력됩니다.</div>
+          </div>
+          <div class="field" data-field="period" data-req="false" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both">
+            <div class="period-header">
+              <span class="field-label">후원 기간을 선택해 주세요</span>
+              <span class="period-hint" id="periodHint">어린이가 졸업할 때까지 함께해요 🎓</span>
+            </div>
+            <div class="period-options">
+              <button class="period-btn" type="button" data-val="3년" data-hint="선택한 기간 동안 어린이 후원이 유지돼요.">
+                <span class="period-btn-main">3년</span>
+              </button>
+              <button class="period-btn" type="button" data-val="5년" data-hint="선택한 기간 동안 어린이 후원이 유지돼요.">
+                <span class="period-btn-main">5년</span>
+              </button>
+              <button class="period-btn period-btn-recommend active" type="button" data-val="10년 이상" data-hint="어린이가 졸업할 때까지 함께해요 🎓">
+                <span class="period-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.2 21H6.4A1.4 1.4 0 015 19.6v-8.2A1.4 1.4 0 016.4 10h2.8v11zm2-11.3l3.2-6.9a1 1 0 011.3-.5l.6.3a2.2 2.2 0 011.1 2.5L16.7 9h2.6a2 2 0 011.95 2.45l-1.3 6.2A3 3 0 0117.02 20H11.2V9.7z"/></svg>
+                </span>
+                <span class="period-btn-main">10년 이상</span>
+                <span class="period-btn-sub">(졸업할 때까지)</span>
+              </button>
+            </div>
+          </div>
+          <div class="field" data-field="region" data-req="true" data-label="지역" data-forms="standard,church_reg,church_both,corp_child">
+            <div class="field-label">지역<span class="req-mark">*</span><span class="field-hint">지도에서 원하는 지역을 선택해 주세요</span></div>
+            <div class="region-grid">
+              <button class="region-card" type="button" data-region="아시아" aria-pressed="false">
+                <span class="region-card-map">
+                  <svg viewBox="14 14 706 364" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#worldOutline" x="0" y="0"/></svg>
+                </span>
+                <span class="region-card-label">아시아</span>
+              </button>
+
+              <button class="region-card" type="button" data-region="중남미" aria-pressed="false">
+                <span class="region-card-map">
+                  <svg viewBox="14 14 706 364" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#worldOutline" x="0" y="0"/></svg>
+                </span>
+                <span class="region-card-label">중남미</span>
+              </button>
+
+              <button class="region-card" type="button" data-region="아프리카" aria-pressed="false">
+                <span class="region-card-map">
+                  <svg viewBox="14 14 706 364" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#worldOutline" x="0" y="0"/></svg>
+                </span>
+                <span class="region-card-label">아프리카</span>
+              </button>
+
+              <button class="region-card" type="button" data-region="상관없음" aria-pressed="false">
+                <span class="region-card-map">
+                  <svg viewBox="14 14 706 364" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#worldOutline" x="0" y="0"/></svg>
+                </span>
+                <span class="region-card-label">상관없음</span>
+              </button>
+            </div>
+          </div>
+          <div class="field" data-field="childGender" data-req="true" data-forms="standard,church_reg,church_both,corp_child">
+            <div class="field-label">성별(어린이)<span class="req-mark">*</span></div>
+            <div class="choice-group" data-choice="childGender">
+              <button class="choice-btn" type="button" data-val="남자">남자</button>
+              <button class="choice-btn" type="button" data-val="여자">여자</button>
+              <button class="choice-btn" type="button" data-val="상관없음">상관없음</button>
+            </div>
+          </div>
+          <div class="field" data-field="letter" data-req="false" data-forms="standard,consign_manual,church_reg,church_both">
+            <div class="field-label">편지</div>
+            <div class="choice-group" data-choice="letter">
+              <button class="choice-btn active" type="button" data-val="영어">영어</button>
+              <button class="choice-btn" type="button" data-val="한글">한글</button>
+            </div>
+          </div>
+
+          <!-- ── 기업 1:1 어린이양육 후원_임직원용 전용 ── -->
+          <div class="field" data-field="empAmount" data-req="true" data-label="후원금액" data-forms="corp_child_emp">
+            <div class="field-label">후원금액<span class="req-mark">*</span></div>
+            <div class="amount-row">
+              <input class="text-input" type="text" inputmode="numeric" placeholder="금액 입력"
+                     data-input="empAmount" id="empAmountInput" aria-label="후원금액">
+              <span class="amount-suffix">원</span>
+            </div>
+          </div>
+          <div class="field" data-field="empType" data-req="true" data-label="후원형태" data-forms="corp_child_emp">
+            <div class="field-label">후원형태<span class="req-mark">*</span></div>
+            <div class="choice-group" data-choice="empType">
+              <button class="choice-btn" type="button" data-val="임직원 매칭그랜트">임직원 매칭그랜트</button>
+              <button class="choice-btn" type="button" data-val="임직원 편지후원">임직원 편지후원</button>
+            </div>
+          </div>
+
+          <!-- ── 기업 1:1 어린이양육 후원 전용 ── -->
+          <div class="field" data-field="letterService" data-req="false" data-label="편지" data-forms="corp_child">
+            <div class="field-label">편지</div>
+            <div class="choice-group" data-choice="letterService">
+              <button class="choice-btn" type="button" data-val="직접작성">직접작성</button>
+              <button class="choice-btn" type="button" data-val="스마트레터 서비스(대필편지)">스마트레터 서비스(대필편지)</button>
+            </div>
+          </div>
+
+          <div class="field sub-section" data-field="corpChildMethod" data-req="true" data-label="후원방법" data-forms="corp_child">
+            <div class="field-label">후원방법<span class="req-mark">*</span><span class="field-hint">택 1</span></div>
+            <div class="choice-group option-list" data-choice="corpChildMethod">
+              <button class="choice-btn option-card" type="button" data-val="기업약정후원">
+                <span class="option-radio" aria-hidden="true"></span>
+                <span class="option-text">
+                  <span class="option-title">기업약정후원</span>
+                  <span class="option-desc">기업명의로 1:1 어린이결연을 약정하여 후원</span>
+                </span>
+              </button>
+              <button class="choice-btn option-card" type="button" data-val="임직원 매칭그랜트">
+                <span class="option-radio" aria-hidden="true"></span>
+                <span class="option-text">
+                  <span class="option-title">임직원 매칭그랜트</span>
+                  <span class="option-desc">어린이와 임직원 매칭, 기업과 임직원이 함께 후원금 부담</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="field sub-section" data-field="bizLicense" data-req="true" data-label="사업자등록증사본" data-forms="corp_child">
+            <div class="field-label">제출서류 — 사업자등록증사본<span class="req-mark">*</span></div>
+            <label class="upload-box" id="bizLicenseBox">
+              <input type="file" accept="image/*,application/pdf" id="bizLicenseInput" hidden>
+              <span class="upload-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3l-1.5-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg>
+              </span>
+              <span class="upload-text">사진 촬영 또는 파일 선택</span>
+              <span class="upload-hint">JPG · PNG · PDF, 10MB 이하</span>
+            </label>
+            <div class="upload-preview" id="bizLicensePreview" hidden>
+              <img id="bizLicenseThumb" alt="사업자등록증사본 미리보기" hidden>
+              <div class="upload-file">
+                <span class="upload-name" id="bizLicenseName"></span>
+                <button class="upload-remove" type="button" id="bizLicenseRemove">삭제</button>
+              </div>
+            </div>
+            <div class="verify-msg" id="bizLicenseMsg" role="status"></div>
+          </div>
+          <div class="field sub-section" data-field="giftBirthday" data-req="false" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both">
+            <div class="toggle-row">
+              <div class="field-label" style="margin-bottom:0;">생일선물금을 보냅니다</div>
+              <div class="toggle on" id="giftBdToggle" data-gift-toggle="giftBirthday" data-gift-panel="giftBdSlider" role="switch" tabindex="0" aria-checked="true"></div>
+            </div>
+            <div class="slider-wrap" id="giftBdSlider">
+              <div class="field-note" style="margin-bottom:8px;">1년에 한번, 후원 어린이 생일 한달 전에 결제됩니다.</div>
+              <div class="slider-row"><span class="slider-val" id="giftBdVal">30,000</span><span class="slider-unit">원 / 년</span></div>
+              <input type="range" min="20000" max="190000" step="1000" value="30000" data-slider-target="giftBdVal">
+              <div class="slider-min-max"><span>20,000</span><span>190,000</span></div>
+            </div>
+          </div>
+          <div class="field sub-section" data-field="giftXmas" data-req="false" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both">
+            <div class="toggle-row">
+              <div class="field-label" style="margin-bottom:0;">크리스마스선물금을 보냅니다</div>
+              <div class="toggle" id="giftXmasToggle" data-gift-toggle="giftXmas" data-gift-panel="giftXmasSlider" role="switch" tabindex="0" aria-checked="false"></div>
+            </div>
+            <div class="slider-wrap" id="giftXmasSlider" hidden>
+              <div class="field-note" style="margin-bottom:8px;">올해는 오늘 결제되며, 내년부터는 연 1회 9월에 결제됩니다.</div>
+              <div class="slider-row"><span class="slider-val" id="giftXmasVal">30,000</span><span class="slider-unit">원 / 년</span></div>
+              <input type="range" min="20000" max="100000" step="1000" value="30000" data-slider-target="giftXmasVal">
+              <div class="slider-min-max"><span>20,000</span><span>100,000</span></div>
+            </div>
+          </div>
+
+          <div class="field sub-section" data-field="babyMomBox" data-req="false" data-forms="church_reg,church_both">
+            <div class="field-label" style="font-size:14px;">아기와 엄마 살리기</div>
+            <div class="field" data-field="babyMomCycle" data-req="false" data-forms="church_both" style="margin-top:10px;">
+              <div class="field-label">후원 주기</div>
+              <div class="choice-group" data-choice="babyMomCycle">
+                <button class="choice-btn" type="button" data-val="매월(정기)">매월(정기)</button>
+                <button class="choice-btn" type="button" data-val="1회(일시)">1회(일시)</button>
+              </div>
+            </div>
+            <div class="field" data-field="babyMomAmount" data-req="false" data-forms="church_reg,church_both" style="margin-top:10px;">
+              <div class="field-label">후원 금액</div>
+              <div class="choice-group" data-choice="babyMomAmount">
+                <button class="choice-btn" type="button" data-val="2만원">2만원</button>
+                <button class="choice-btn" type="button" data-val="3만원">3만원</button>
+                <button class="choice-btn" type="button" data-val="5만원">5만원</button>
+                <button class="choice-btn" type="button" data-val="기타">기타</button>
+              </div>
+              <!-- '기타' 선택 시에만 노출 (data-cond="babyMomEtc") -->
+              <div class="field" data-field="babyMomEtc" data-req="false" data-cond="babyMomEtc" data-forms="church_reg,church_both" style="margin-top:10px;">
+                <div class="amount-row">
+                  <input class="text-input" type="text" inputmode="numeric" placeholder="금액 직접 입력"
+                         data-input="babyMomEtc" id="babyMomEtcInput" aria-label="아기와 엄마 살리기 후원 금액 직접 입력">
+                  <span class="amount-suffix">원</span>
+                </div>
+                <div class="field-note">1,000원 단위로 입력해 주세요.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 기업 후원방법 -->
+        <div class="corp-support-fields" hidden>
+          <div class="field" data-field="corpMethod" data-req="true" data-forms="corp">
+            <div class="field-label">후원방법<span class="req-mark">*</span></div>
+            <div class="method-row">
+              <div class="choice-group" data-choice="corpMethod">
+                <button class="choice-btn" type="button" data-val="일시후원">일시후원</button>
+                <button class="choice-btn" type="button" data-val="정기후원">정기후원</button>
+              </div>
+              <!-- 후원방법을 고르면 우측에 금액 입력 (일시/정기 공통) -->
+              <div class="field method-amount" data-field="corpAmount" data-req="true" data-cond="corpAmount"
+                   data-label="후원금액" data-forms="corp">
+                <div class="amount-row">
+                  <input class="text-input" type="text" inputmode="numeric" placeholder="금액 입력"
+                         data-input="corpAmount" id="corpAmountInput" aria-label="후원금액">
+                  <span class="amount-suffix" id="corpAmountUnit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field" data-field="corpProgram" data-req="true" data-forms="corp">
+            <div class="field-label">후원 프로그램<span class="req-mark">*</span></div>
+            <div class="choice-group option-list" data-choice="corpProgram">
+              <button class="choice-btn option-card" type="button" data-val="제안 프로젝트">
+                <span class="option-radio" aria-hidden="true"></span>
+                <span class="option-text">
+                  <span class="option-title">제안 프로젝트</span>
+                  <span class="option-desc">기업 사업분야 및 필요에 맞춘 제안서 내용대로 후원합니다.</span>
+                </span>
+              </button>
+              <button class="choice-btn option-card" type="button" data-val="아기와 엄마 살리기">
+                <span class="option-radio" aria-hidden="true"></span>
+                <span class="option-text">
+                  <span class="option-title">아기와 엄마 살리기</span>
+                  <span class="option-desc">엄마와 0-만1세 아기를 돕습니다.</span>
+                </span>
+              </button>
+              <button class="choice-btn option-card" type="button" data-val="주제별 양육보완">
+                <span class="option-radio" aria-hidden="true"></span>
+                <span class="option-text">
+                  <span class="option-title">주제별 양육보완</span>
+                  <span class="option-desc">어린이가 지속적, 효과적으로 양육 받을 수 있도록 돕습니다.</span>
+                </span>
+              </button>
+              <button class="choice-btn option-card" type="button" data-val="기타지정목적" aria-expanded="false" aria-controls="corpProgramEtcWrap">
+                <span class="option-radio" aria-hidden="true"></span>
+                <span class="option-text">
+                  <span class="option-title">기타지정목적</span>
+                </span>
+              </button>
+              <!-- '기타지정목적' 바로 아래로 펼쳐지는 직접입력 -->
+              <div class="option-expand" id="corpProgramEtcWrap">
+                <div class="option-expand-inner">
+                  <div class="field" data-field="corpProgramEtc" data-req="true"
+                       data-label="기타지정목적 내용" data-forms="corp">
+                    <input class="text-input" type="text" placeholder="지정하실 목적을 입력해 주세요"
+                           data-input="corpProgramEtc" id="corpProgramEtcInput" aria-label="기타지정목적 내용">
+                  </div>
+                </div>
+              </div>
+              <button class="choice-btn option-card" type="button" data-val="목적 미지정">
+                <span class="option-radio" aria-hidden="true"></span>
+                <span class="option-text">
+                  <span class="option-title">목적 미지정</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 후원 합계 -->
+        <hr class="section-divider">
+        <div class="total-box">
+          <ul class="total-list" id="totalList"></ul>
+          <div class="total-empty" id="totalEmpty">후원 항목을 입력하면 합계가 표시됩니다.</div>
+          <div class="total-extra" id="totalYearlyRow" hidden>
+            <span>년 1회 결제 (선물금)</span><span><b id="totalYearly">0</b>원 / 년</span>
+          </div>
+          <div class="total-extra" id="totalOnceRow" hidden>
+            <span>1회 결제 (일시후원)</span><span><b id="totalOnce">0</b>원</span>
+          </div>
+          <div class="total-head">
+            <span class="total-title">TOTAL</span>
+            <span class="total-monthly"><b id="totalMonthly">0</b>원<span class="total-unit">/ 매월</span></span>
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <button class="prev-btn" type="button" data-prev="2">이전</button>
+          <button class="next-btn" type="button" id="nextBtn2" data-next="2">다음</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ ACCORDION 3: 후원금 결제방법 ══════ -->
+  <section class="group locked" id="group3" data-group="3">
+    <div class="group-head">
+      <span class="group-num">3</span>
+      <span class="group-title">후원금 결제방법</span>
+      <span class="group-done-badge">입력완료</span>
+    </div>
+    <div class="group-body" id="groupBody3" role="region" aria-labelledby="group3">
+      <div class="group-body-inner">
+
+        <div class="field-note" style="margin-bottom:14px;">기부금영수증은 소득세법에 의해 실제 후원금 납부자만 받으실 수 있습니다.</div>
+
+        <div class="field payment-method-box" data-field="payAccount" data-req="true" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp" id="payAccountBox">
+          <div class="payment-method-head" data-pay-method="account">
+            <div class="radio-dot" id="dotAccount"></div>
+            계좌 자동이체(CMS)
+          </div>
+          <div class="payment-fields">
+            <div class="field">
+              <div class="addr-row">
+                <input class="text-input" type="text" inputmode="numeric" placeholder="계좌번호"
+                       data-input="payAccount" id="cmsAccountInput">
+                <button class="addr-btn" type="button" id="cmsVerifyBtn">인증요청</button>
+              </div>
+              <div class="verify-badge" id="cmsVerifiedBadge" hidden>✓ 계좌 인증 완료</div>
+            </div>
+            <div class="field"><input class="text-input" type="text" placeholder="은행명"></div>
+            <div class="field"><input class="text-input" type="text" placeholder="예금주 생년월일(또는 사업자번호)"></div>
+
+            <!-- 1원 인증 -->
+            <div class="verify-box" id="cmsVerifyBox" hidden>
+              <div class="verify-head">
+                <span>입금내역의 <b>입금자명 숫자 4자리</b>를 입력해 주세요.</span>
+                <span class="verify-timer" id="cmsTimer">03:00</span>
+              </div>
+              <div class="addr-row">
+                <input class="text-input" type="text" inputmode="numeric" maxlength="4"
+                       placeholder="인증번호 4자리" id="cmsCodeInput" aria-label="계좌 인증번호">
+                <button class="addr-btn" type="button" id="cmsConfirmBtn">확인</button>
+              </div>
+            </div>
+            <div class="verify-msg" id="cmsVerifyMsg" role="status"></div>
+
+            <div class="field sub-section" data-field="payDate" data-req="true" data-label="이체일"
+                 data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp">
+              <div class="field-label">이체일<span class="req-mark">*</span></div>
+              <div class="choice-group" data-choice="payDate">
+                <button class="choice-btn" type="button" data-val="5일">5일</button>
+                <button class="choice-btn" type="button" data-val="15일">15일</button>
+                <button class="choice-btn" type="button" data-val="25일">25일</button>
+              </div>
+              <div class="field-note">*미선택 시 25일 이체 (재출금일 20일, 27일)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field payment-method-box" data-field="payCard" data-req="true" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp" id="payCardBox">
+          <div class="payment-method-head" data-pay-method="card">
+            <div class="radio-dot" id="dotCard"></div>
+            카드 자동결제
+          </div>
+          <div class="payment-fields">
+            <div class="field">
+              <input class="text-input" type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23"
+                     placeholder="카드번호 0000-0000-0000-0000" data-input="payCard" id="cardNumberInput">
+              <div class="verify-msg" id="cardMsg" role="status"></div>
+            </div>
+            <div class="row-2 field">
+              <input class="text-input" type="text" placeholder="유효기간 MM/YY">
+              <input class="text-input" type="text" placeholder="카드주명">
+            </div>
+            <div class="field"><input class="text-input" type="text" placeholder="카드주 생년월일(또는 사업자번호)"></div>
+
+            <div class="field sub-section" data-field="payDateCard" data-req="true" data-label="결제일"
+                 data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp">
+              <div class="field-label">결제일<span class="req-mark">*</span></div>
+              <div class="choice-group" data-choice="payDateCard">
+                <button class="choice-btn" type="button" data-val="5일">5일</button>
+                <button class="choice-btn" type="button" data-val="15일">15일</button>
+                <button class="choice-btn" type="button" data-val="25일">25일</button>
+              </div>
+              <div class="field-note">*미선택 시 25일 이체 (재결제일 20일, 27일)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" data-field="payerAddress" data-req="false" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp">
+          <div class="field-label">기부자 주소(납부자)<span class="field-hint">*후원자 주소와 다를 경우 기재</span></div>
+          <div class="addr-row">
+            <input class="text-input" type="text" placeholder="도로명 주소">
+            <button class="addr-btn" type="button" data-addr-search>주소찾기</button>
+          </div>
+          <input class="text-input addr-detail" type="text" placeholder="상세주소 (동/호수)" aria-label="상세주소">
+        </div>
+
+        <div class="step-actions">
+          <button class="prev-btn" type="button" data-prev="3">이전</button>
+          <button class="next-btn" type="button" id="nextBtn3" data-next="3">다음</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ ACCORDION 4: 개인정보 동의 및 서명 ══════ -->
+  <section class="group locked" id="group4" data-group="4">
+    <div class="group-head">
+      <span class="group-num">4</span>
+      <span class="group-title">개인정보 동의 및 서명</span>
+      <span class="group-done-badge">입력완료</span>
+    </div>
+    <div class="group-body" id="groupBody4" role="region" aria-labelledby="group4">
+      <div class="group-body-inner">
+
+        <!-- 개인 후원자용: 개인정보 수집·이용 동의 -->
+        <div class="field consent-box" data-field="consentCollect" data-req="true" data-label="개인정보 수집·이용 동의"
+             data-forms="standard,consign_manual,consign_assigned,church_reg,church_both">
+          <div class="consent-head">
+            <div class="consent-title">개인정보 수집·이용 동의</div>
+            <span class="consent-req">필수</span>
+          </div>
+          <dl class="consent-terms">
+            <div class="consent-term"><dt>수집항목</dt><dd>이름, 연락처, 주소, 성별, 이메일, 생년월일, 종교, 출석교회<br>신용카드: 카드사명, 카드번호, 유효기간, 카드명의자, 카드명의자 생년월일<br>자동이체(CMS): 은행명, 계좌번호, 예금주명, 예금주 생년월일</dd></div>
+            <div class="consent-term"><dt>이용목적</dt><dd>후원금 납부관련 서비스 제공, 국세청에 후원내역 등록, 공지사항 전달, 행사 안내, 후원사실 확인을 위한 기록 보존</dd></div>
+            <div class="consent-term"><dt>보유기간</dt><dd>동의일로부터 후원 종료일까지</dd></div>
+          </dl>
+          <div class="choice-group" data-choice="consentCollect">
+            <button class="choice-btn" type="button" data-val="동의함">동의함</button>
+            <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+          </div>
+          <ul class="consent-notes">
+            <li>소득세법 제160조의3, 법인세법 제112조의2 및 동법 시행령 제155조의2에 의거 주민등록번호 처리 및 5년간 보관 후 파기합니다.</li>
+            <li>개인정보 수집·이용에 동의하지 않을 수 있으나 동의 거부 시에는 후원 신청이 불가능합니다.</li>
+            <li>상세 내용은 한국컴패션 홈페이지(<a href="https://www.compassion.or.kr" target="_blank" rel="noopener">www.compassion.or.kr</a>)에 공개된 개인정보 처리방침을 참고하시기 바랍니다.</li>
+          </ul>
+        </div>
+
+        <!-- 기업후원용: 개인정보 수집·이용 동의 -->
+        <div class="field consent-box" data-field="consentCollectCorp" data-req="true" data-label="개인정보 수집·이용 동의"
+             data-forms="corp,corp_child">
+          <div class="consent-head">
+            <div class="consent-title">개인정보 수집·이용 동의</div>
+            <span class="consent-req">필수</span>
+          </div>
+          <p class="consent-detail">귀사의 후원 업무 담당자는 『개인정보보호법』제15조, 제22조, 제23조 및 제24조에 따라 한국컴패션이 아래와 같은 내용으로 본인의 개인정보를 수집·이용 하는 것에 동의합니다.</p>
+          <dl class="consent-terms">
+            <div class="consent-term"><dt>수집항목</dt><dd>담당자명, 휴대폰번호, 이메일</dd></div>
+            <div class="consent-term"><dt>이용목적</dt><dd>기업 후원 운영에 필요한 서비스 제공</dd></div>
+            <div class="consent-term"><dt>보유기간</dt><dd>동의일로부터 정보주체의 동의 철회/퇴사 시 또는 동의일로부터 후원종료일까지</dd></div>
+          </dl>
+          <div class="choice-group" data-choice="consentCollectCorp">
+            <button class="choice-btn" type="button" data-val="동의함">동의함</button>
+            <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+          </div>
+          <ul class="consent-notes">
+            <li>귀하는 개인정보 수집·이용에 동의하지 않으실 수 있습니다. 다만, 동의 거부시에는 후원 신청이 불가능합니다.</li>
+          </ul>
+        </div>
+
+        <!-- 임직원용: 개인정보 수집·이용 동의 -->
+        <div class="field consent-box" data-field="consentCollectEmp" data-req="true" data-label="개인정보 수집·이용 동의"
+             data-forms="corp_child_emp">
+          <div class="consent-head">
+            <div class="consent-title">개인정보 수집·이용 동의</div>
+            <span class="consent-req">필수</span>
+          </div>
+          <p class="consent-detail">한국컴패션이 『개인정보보호법』제15조, 제22조, 제23조 및 제24조에 따라 아래와 같은 내용으로 후원자님의 개인정보를 수집·이용 하는 것에 동의합니다.</p>
+          <dl class="consent-terms">
+            <div class="consent-term"><dt>수집항목</dt><dd>성명, 생년월일, 소득공제자, 연락처, 주소, 이메일, 재직 중인 회사</dd></div>
+            <div class="consent-term"><dt>이용목적</dt><dd>본인확인, 후원금납부 관련 서비스 제공, 공지사항 전달, 후원 사실 확인을 위한 기록보존</dd></div>
+            <div class="consent-term"><dt>보유기간</dt><dd>동의일로부터 후원 종료일까지</dd></div>
+          </dl>
+          <div class="choice-group" data-choice="consentCollectEmp">
+            <button class="choice-btn" type="button" data-val="동의함">동의함</button>
+            <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+          </div>
+          <ul class="consent-notes">
+            <li>소득세법 제160조의3, 법인세법 제112조의2 및 동법 시행령 제155조의2에 의거 주민등록번호 처리 및 5년간 보관 후 파기합니다.</li>
+            <li>개인정보 수집 이용에 동의하지 않을 수 있으며 동의 거부 시에는 후원 신청이 불가능합니다.</li>
+          </ul>
+        </div>
+
+        <!-- 임직원용: 제3자 제공 동의 -->
+        <div class="field consent-box" data-field="consentThirdPartyEmp" data-req="false" data-label="제3자 제공 동의"
+             data-forms="corp_child_emp">
+          <div class="consent-head">
+            <div class="consent-title">제3자 제공 동의</div>
+            <span class="consent-req optional">선택</span>
+          </div>
+          <p class="consent-detail">후원자님은 한국컴패션이 수집한 개인정보를 제3자에게 제공하는 것에 동의합니다.</p>
+          <dl class="consent-terms">
+            <div class="consent-term"><dt>제공회사</dt><dd>재직 중인 회사의 후원 담당자</dd></div>
+            <div class="consent-term"><dt>제공항목</dt><dd>성명, 후원자 번호</dd></div>
+            <div class="consent-term"><dt>이용목적</dt><dd>본인확인, 기업 후원 담당자를 통한 후원 운영 업무에 필요한 후원 현황 확인 및 서비스 제공</dd></div>
+            <div class="consent-term"><dt>보유기간</dt><dd>동의일로부터 후원종료일까지</dd></div>
+          </dl>
+          <div class="choice-group" data-choice="consentThirdPartyEmp">
+            <button class="choice-btn" type="button" data-val="동의함">동의함</button>
+            <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+          </div>
+          <ul class="consent-notes">
+            <li>귀하는 상기 동의를 거부할 수 있습니다. 다만, 동의 거부시에는 재직 중인 회사의 후원 담당자는 후원자님의 성명을 포함한 후원정보를 제공받을 수 없습니다.</li>
+          </ul>
+        </div>
+
+        <!-- 개인 후원자용: 자동이체 제3자 제공 동의 -->
+        <div class="field consent-box" data-field="consentThirdParty" data-req="true" data-label="후원금 자동이체 동의(제3자 제공)"
+             data-forms="standard,consign_manual,consign_assigned,church_reg,church_both">
+          <div class="consent-head">
+            <div class="consent-title">후원금 자동이체 동의(제3자 제공 동의)</div>
+            <span class="consent-req">필수</span>
+          </div>
+          <dl class="consent-terms">
+            <div class="consent-term"><dt>제공회사</dt><dd>사단법인 금융결제원, 효성FMS주식회사</dd></div>
+            <div class="consent-term"><dt>제공항목</dt><dd>이름, 은행명, 계좌번호, 예금주 생년월일, 휴대번호</dd></div>
+            <div class="consent-term"><dt>이용목적</dt><dd>CMS자동이체 서비스 제공 및 출금동의 확인</dd></div>
+            <div class="consent-term"><dt>보유기간</dt><dd>CMS자동이체 서비스 제공 및 출금동의 확인 목적을 달성할 때까지</dd></div>
+          </dl>
+          <div class="choice-group" data-choice="consentThirdParty">
+            <button class="choice-btn" type="button" data-val="동의함">동의함</button>
+            <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+          </div>
+          <ul class="consent-notes">
+            <li>개인정보에 대해 금융결제원 및 효성FMS에 제공하는 것을 거부할 권리가 있으며 <b class="warn">거부 시 출금이체 신청이 거부될 수 있습니다.</b></li>
+          </ul>
+        </div>
+
+        <!-- 기업후원용: 임직원 개인정보 제3자 제공 동의 확인 -->
+        <div class="field consent-box" data-field="consentEmployee3rd" data-req="true" data-label="개인정보 제3자 제공 동의 확인"
+             data-forms="corp,corp_child">
+          <div class="consent-head">
+            <div class="consent-title">개인정보 제3자 제공 동의 확인 및 이용 목적</div>
+            <span class="consent-req">임직원 후원신청시 필수</span>
+          </div>
+          <p class="consent-detail">귀사는 한국컴패션 후원을 위해 귀사의 임직원에게 받은 개인 정보를 한국컴패션 후원 서비스 및 부가서비스 제공의 목적으로 활용하도록 임직원에게 ‘개인정보 제3자 제공 동의’를 받았음을 확인합니다.</p>
+          <div class="choice-group" data-choice="consentEmployee3rd">
+            <button class="choice-btn" type="button" data-val="동의함">동의함</button>
+            <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+          </div>
+        </div>
+
+        <div class="field consent-box" data-field="consentChurch" data-req="false" data-label="교회 후원정보 제공 동의" data-forms="church_reg,church_both">
+          <div class="consent-head">
+            <div class="consent-title">교회 후원정보 제공 동의</div>
+            <span class="consent-req optional">선택</span>
+          </div>
+          <dl class="consent-terms">
+            <div class="consent-term"><dt>제공업체</dt><dd>출석 중인 교회</dd></div>
+            <div class="consent-term"><dt>제공항목</dt><dd>성명, 후원현황(본 신청을 통한 후원 내역만 제공)</dd></div>
+            <div class="consent-term"><dt>제공목적</dt><dd>후원 서비스 제공(후원 현황판 및 후원 내용)</dd></div>
+            <div class="consent-term"><dt>보유기간</dt><dd>동의일로부터 후원 종료일까지</dd></div>
+          </dl>
+          <div class="choice-group" data-choice="consentChurch">
+            <button class="choice-btn" type="button" data-val="동의함">동의함</button>
+            <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+          </div>
+          <ul class="consent-notes">
+            <li>상기 정보 제공 동의에 거부할 수 있으며, 거부 시 서비스 제공에 불이익이 발생할 수 있습니다.</li>
+          </ul>
+        </div>
+
+        <div class="field consent-box" data-field="consentMkt" data-req="false"
+             data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp">
+          <div class="consent-head">
+            <div class="consent-title" data-only-forms="standard,consign_manual,consign_assigned,church_reg,church_both">마케팅 정보 수신 동의</div>
+            <div class="consent-title" data-only-forms="corp,corp_child,corp_child_emp">홍보·마케팅 이용 동의</div>
+            <span class="consent-req optional">선택</span>
+          </div>
+          <p class="consent-detail" data-only-forms="corp,corp_child,corp_child_emp">
+            귀사는 수집한 귀사의 정보를 활용하여 한국컴패션이 홍보·마케팅(기관 소식지, 이벤트)에 이용하는 것에 동의합니다.
+          </p>
+          <div class="choice-group" data-choice="consentMkt">
+            <button class="choice-btn" type="button" data-val="전체동의">전체동의</button>
+            <button class="choice-btn" type="button" data-val="동의하지 않음">동의하지 않음</button>
+          </div>
+          <div class="mkt-channels">
+            <label class="mkt-channel"><input type="checkbox" value="카카오톡/문자">카카오톡/문자</label>
+            <label class="mkt-channel"><input type="checkbox" value="이메일">이메일</label>
+            <label class="mkt-channel"><input type="checkbox" value="우편">우편</label>
+            <label class="mkt-channel"><input type="checkbox" value="전화">전화</label>
+          </div>
+          <ul class="consent-notes" data-only-forms="standard,consign_manual,consign_assigned,church_reg,church_both">
+            <li>상기 동의를 거부할 수 있으며 미동의 시 소식지, 이벤트, 행사안내가 어려울 수 있습니다.</li>
+          </ul>
+          <ul class="consent-notes" data-only-forms="corp,corp_child,corp_child_emp">
+            <li>귀사는 상기 동의를 거부할 수 있습니다. 다만, 이에 동의를 하시지 않을 경우에는 소식지, 이벤트 확인이 어려울 수 있습니다.</li>
+          </ul>
+        </div>
+
+        <p class="privacy-note" data-only-forms="corp,corp_child,corp_child_emp">
+          ※ 자세한 내용은 한국컴패션 홈페이지(<a href="https://www.compassion.or.kr" target="_blank" rel="noopener">www.compassion.or.kr</a>)에 공개된 개인정보 처리방침을 참조하실 수 있습니다.
+        </p>
+        <p class="privacy-note" data-only-forms="corp_child_emp">
+          ※ 재직 중인 회사 퇴사 시, 매칭된 어린이와 편지 결연이 종료됩니다.
+        </p>
+
+        <div class="field" data-field="signApplicant" data-req="true" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp" style="margin-top:4px;">
+          <div class="sign-row">
+            <div class="sign-label">신청인(대리인)<span class="req-mark">*</span></div>
+            <input class="text-input sign-input" type="text" placeholder="이름 + 서명" data-input="signApplicant">
+          </div>
+        </div>
+        <div class="field" data-field="signPayer" data-req="false" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp">
+          <div class="sign-row">
+            <div class="sign-label">납부자(신청인과 다를 경우)</div>
+            <input class="text-input sign-input" type="text" placeholder="이름 + 서명">
+          </div>
+        </div>
+
+        <!-- ── 5. 후원계기 및 후원동기 ── -->
+        <hr class="section-divider">
+        <div class="sub-head">
+          <span class="sub-num">5</span>
+          <span class="sub-title">후원계기 및 후원동기</span>
+        </div>
+
+        <div class="field" data-field="motiveSource" data-req="false" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp">
+          <div class="field-label">후원계기</div>
+          <select class="select-input placeholder" data-input="motiveSource" id="motiveSourceSelect" aria-label="후원계기">
+            <option value="">선택해 주세요</option>
+            <option value="다큐영화(아버지의 마음)">다큐영화(아버지의 마음)</option>
+            <option value="컴패션과 함께하는 예배">컴패션과 함께하는 예배</option>
+            <option value="설교, 강의 등 기타 교회 행사">설교, 강의 등 기타 교회 행사</option>
+            <option value="컴패션 오프라인 행사/이벤트">컴패션 오프라인 행사/이벤트</option>
+            <option value="컴패션 온라인 행사/이벤트">컴패션 온라인 행사/이벤트</option>
+            <option value="컴패션 비전트립">컴패션 비전트립</option>
+            <option value="컴패션 홈페이지">컴패션 홈페이지</option>
+            <option value="연예인, 홍보대사 및 컴패션밴드">연예인, 홍보대사 및 컴패션밴드</option>
+            <option value="인플루언서">인플루언서</option>
+            <option value="미디어(TV, 라디오, 신문 등)">미디어(TV, 라디오, 신문 등)</option>
+            <option value="SNS(유튜브, 인스타그램, 네이버 블로그 등)">SNS(유튜브, 인스타그램, 네이버 블로그 등)</option>
+            <option value="포털사이트(네이버, 구글, 다음 등)">포털사이트(네이버, 구글, 다음 등)</option>
+            <option value="후원자 홍보대사(VOC, FOC, YVOC)">후원자 홍보대사(VOC, FOC, YVOC)</option>
+            <option value="가족, 지인 소개 및 추천">가족, 지인 소개 및 추천</option>
+            <option value="기업, 학교 등 단체 소개">기업, 학교 등 단체 소개</option>
+            <option value="컴패션 번역메이트">컴패션 번역메이트</option>
+            <option value="기타">기타</option>
+            <option value="TEST">TEST</option>
+          </select>
+        </div>
+
+        <div class="field" data-field="motiveReason" data-req="false" data-forms="standard,consign_manual,consign_assigned,church_reg,church_both,corp,corp_child,corp_child_emp">
+          <div class="field-label">후원동기</div>
+          <select class="select-input placeholder" data-input="motiveReason" id="motiveReasonSelect" aria-label="후원동기">
+            <option value="">선택해 주세요</option>
+            <option value="어려움에 처한 어린이에 대한 안타까운 마음">어려움에 처한 어린이에 대한 안타까운 마음</option>
+            <option value="후원하면서 느끼게 되는 행복감이나 자부심">후원하면서 느끼게 되는 행복감이나 자부심</option>
+            <option value="기독교의 사랑과 나눔의 실천">기독교의 사랑과 나눔의 실천</option>
+            <option value="지인의 추천 및 참여 요청">지인의 추천 및 참여 요청</option>
+            <option value="생일, 결혼, 취직 등 의미 있는 날의 기념">생일, 결혼, 취직 등 의미 있는 날의 기념</option>
+            <option value="수입의 가치 있는 사용">수입의 가치 있는 사용</option>
+            <option value="자녀, 배우자, 친구 등 지인과 함께 후원">자녀, 배우자, 친구 등 지인과 함께 후원</option>
+            <option value="기존 후원자로서 컴패션 후원에 대한 높은 만족도">기존 후원자로서 컴패션 후원에 대한 높은 만족도</option>
+            <option value="특별한 동기 없음">특별한 동기 없음</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+
+        <div class="step-actions">
+          <button class="prev-btn" type="button" data-prev="4">이전</button>
+          <button class="submit-btn" type="button" id="submitBtn">신청서 제출</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ══════ QR 스캔 ══════ -->
+<div class="qr-overlay" id="qrOverlay" hidden>
+  <div class="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <div class="qr-head">
+      <h3 id="qrTitle">어린이번호 QR 스캔</h3>
+      <button class="settings-close" type="button" id="qrCloseBtn" aria-label="닫기">✕</button>
+    </div>
+    <div class="qr-view">
+      <video id="qrVideo" playsinline muted></video>
+      <div class="qr-frame" aria-hidden="true"></div>
+    </div>
+    <p class="qr-msg" id="qrMsg">카메라를 어린이 카드의 QR코드에 맞춰 주세요.</p>
+    <label class="qr-fallback">
+      QR 이미지 파일로 불러오기
+      <input type="file" accept="image/*" id="qrFile" hidden>
+    </label>
+  </div>
+</div>
+
+<!-- ══════ 설정 패널: 필드별 노출/숨김 ══════ -->
+<div class="settings-overlay" id="settingsOverlay"></div>
+<div class="settings-panel" id="settingsPanel">
+  <div class="settings-header">
+    <h3>필드 노출 설정</h3>
+    <button class="settings-close" type="button" id="settingsCloseBtn">✕</button>
+  </div>
+  <div class="settings-body" id="settingsBody"></div>
+</div>
+
+<!-- 주소찾기(카카오 우편번호 서비스). 오프라인이면 직접 입력으로 대체됩니다. -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
